@@ -13,6 +13,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var tableView: UITableView!
     var movies:[NSDictionary]?
+    var refreshControl: UIRefreshControl!
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -68,9 +69,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // Adding a refresh control, for pull to refresh feature
+        refreshControl = UIRefreshControl()
+        tableView.addSubview(refreshControl)
         
         retrieveDataFromTMDB()
     }
