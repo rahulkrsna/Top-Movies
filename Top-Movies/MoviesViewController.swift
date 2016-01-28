@@ -8,6 +8,7 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -59,8 +60,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
 //                            NSLog("response: \(responseDictionary)")
+                            // Hide the Progress Bar
+                            MBProgressHUD.hideHUDForView(self.view, animated: true)
                             self.movies = responseDictionary["results"] as? [NSDictionary]
                             self.tableView.reloadData()
+                            
+                            //In case initated through refresh control end refresh control
+                            self.refreshControl.endRefreshing()
                     }
                 }
         });
@@ -75,7 +81,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // Adding a refresh control, for pull to refresh feature
         refreshControl = UIRefreshControl()
-        tableView.addSubview(refreshControl)
+        // Set the Action for the refresh Control
+        refreshControl.addTarget(self, action: "retrieveDataFromTMDB", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0) //Insert the refreshControl(UIView) into the tableView at the top
+        
+        //Initialized the progress bar and it will be removed once the information is shown to the user.
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
         retrieveDataFromTMDB()
     }
