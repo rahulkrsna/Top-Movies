@@ -12,6 +12,7 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet var networkErrorView: UIView!
     @IBOutlet weak var tableView: UITableView!
     var movies:[NSDictionary]?
     var refreshControl: UIRefreshControl!
@@ -56,18 +57,22 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
-                if let data = dataOrNil {
-                    if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
-                        data, options:[]) as? NSDictionary {
-//                            NSLog("response: \(responseDictionary)")
-                            // Hide the Progress Bar
-                            MBProgressHUD.hideHUDForView(self.view, animated: true)
-                            self.movies = responseDictionary["results"] as? [NSDictionary]
-                            self.tableView.reloadData()
-                            
-                            //In case initated through refresh control end refresh control
-                            self.refreshControl.endRefreshing()
+                // Hide the Progress Bar
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                //In case initated through refresh control end refresh control
+                self.refreshControl.endRefreshing()
+                if(error == nil) {
+                    self.networkErrorView.hidden = true
+                    if let data = dataOrNil {
+                        if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
+                            data, options:[]) as? NSDictionary {
+                                
+                                self.movies = responseDictionary["results"] as? [NSDictionary]
+                                self.tableView.reloadData()
+                        }
                     }
+                } else {
+                    self.networkErrorView.hidden = false
                 }
         });
         task.resume()
@@ -78,6 +83,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        networkErrorView.hidden = true
         
         // Adding a refresh control, for pull to refresh feature
         refreshControl = UIRefreshControl()
