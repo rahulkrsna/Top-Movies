@@ -120,6 +120,7 @@
 				7C4E2C691C3D974C002E159C /* Resources */,
 				629FCEDE9DF88A2378E1AAF3 /* Embed Pods Frameworks */,
 				A5BC10FAE3073CC4F289C97E /* Copy Pods Resources */,
+				7C568F771C570F57004D4020 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -191,6 +192,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Top-Movies/Pods-Top-Movies-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7C568F771C570F57004D4020 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 		A5BC10FAE3073CC4F289C97E /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
