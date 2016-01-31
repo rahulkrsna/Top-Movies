@@ -15,6 +15,7 @@ The following **required** functionality is complete:
 
 The following **optional** features are implemented:
 - [ ] User sees an error message when there's a networking error.
+- [ ] Movies are displayed using a CollectionView instead of a TableView.
 
 The following **additional** features are implemented:
 
@@ -23,7 +24,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/3uYS0J8.gif' title='Video Walkthrough' width='' alt='TopMovies' />
+<img src='http://i.imgur.com/GIv4Rm3.gif' title='Video Walkthrough' width='' alt='TopMovies' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
