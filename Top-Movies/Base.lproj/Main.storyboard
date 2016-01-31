@@ -25,14 +25,17 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="36"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" text="Network Error" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gka-lQ-jsF">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="Network Error" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gka-lQ-jsF">
                                             <rect key="frame" x="137" y="3" width="110" height="25"/>
                                             <color key="backgroundColor" red="0.49698292620000001" green="0.65151324769999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="tintColor" red="1" green="0.081942766769999995" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="110" id="4qf-9j-o3Q"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="warning-8-24" translatesAutoresizingMaskIntoConstraints="NO" id="oL0-qr-YgA">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="warning-8-24" translatesAutoresizingMaskIntoConstraints="NO" id="oL0-qr-YgA">
                                             <rect key="frame" x="113" y="8" width="26" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="J22-Xs-xxY"/>
@@ -42,6 +45,10 @@
                                     </subviews>
                                     <color key="backgroundColor" red="0.49698292619613638" green="0.6515132476929798" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
+                                        <constraint firstItem="oL0-qr-YgA" firstAttribute="top" secondItem="FDf-eF-QYF" secondAttribute="topMargin" id="2eX-x8-f4f"/>
+                                        <constraint firstItem="gka-lQ-jsF" firstAttribute="bottom" secondItem="FDf-eF-QYF" secondAttribute="bottomMargin" id="38d-LP-uQS"/>
+                                        <constraint firstItem="gka-lQ-jsF" firstAttribute="leading" secondItem="FDf-eF-QYF" secondAttribute="leading" constant="137" id="Ffh-Tl-hMT"/>
+                                        <constraint firstItem="oL0-qr-YgA" firstAttribute="leading" secondItem="FDf-eF-QYF" secondAttribute="leading" constant="113" id="NlZ-V3-2bA"/>
                                         <constraint firstItem="gka-lQ-jsF" firstAttribute="centerY" secondItem="FDf-eF-QYF" secondAttribute="centerY" id="ouz-yy-nXi"/>
                                     </constraints>
                                 </view>
