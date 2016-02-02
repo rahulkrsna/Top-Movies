@@ -63,11 +63,22 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             let imageURL = NSURL(string: baseURL+posterPath)!
             cell.imgView.setImageWithURL(imageURL)
         }
-        
+
         return cell
     }
     
-    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        print(indexPath.row)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath)
+        if let cell = cell {
+//            let backgroundView = UIView()
+//            backgroundView.backgroundColor = UIColor.redColor()
+//            cell.selectedBackgroundView = backgroundView
+            cell.transform = CGAffineTransformMakeScale(-1, 1); //Flipped
+        }
+    }
+
     func retrieveDataFromTMDB() {
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
@@ -86,7 +97,6 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 //In case initated through refresh control end refresh control
                 if(error == nil) {
-//                    self.networkErrorView.hidden = true
                     self.networkErrorButton.hidden = true
                     self.collectionsView.alpha = 1
                     if let data = dataOrNil {
@@ -172,6 +182,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let cell = sender as! UICollectionViewCell
+        
         let indexPath = collectionsView.indexPathForCell(cell)
         let movie = movies![indexPath!.row]
         let detailViewController = segue.destinationViewController as! DetailViewController
