@@ -12,21 +12,22 @@ The following **required** functionality is complete:
 - [X] Poster images are loaded using the UIImageView category in the AFNetworking library.
 - [X] User sees a loading state while waiting for the movies API.
 - [X] User can pull to refresh the movie list.
-- [ ] User can view movie details by tapping on a cell.
-- [ ] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
-- [ ] Customize the selection effect of the cell. 
+- [X] User can view movie details by tapping on a cell.
+- [X] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
+- [X] Customize the selection effect of the cell. 
 
 The following **optional** features are implemented:
 - [X] User sees an error message when there's a networking error.
 - [X] Movies are displayed using a CollectionView instead of a TableView.
-- [ ] User can search for a movie.
+- [X] User can search for a movie.
 - [ ] All images fade in as they are loading.
 - [ ] Customize the UI.
 - [ ] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
 - [ ] Customize the navigation bar.
 
 The following **additional** features are implemented:
-- [ ] List anything else that you can get done to improve the app functionality!
+- [X] Collection View cell size(width, height) calculated dynamically so as to fit only two cells horizantally on iphone of any size.
+- [X] Cache data is invalidate after 100ms, so that network error is shown on refresh of the app.
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 

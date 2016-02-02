@@ -11,11 +11,13 @@ import AFNetworking
 import MBProgressHUD
 
 //class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class MoviesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
 
     @IBOutlet var collectionsView: UICollectionView!
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet var networkErrorButton: UIButton!
+    @IBOutlet var search: UISearchBar!
+    
     var endpoint: String!
     @IBAction func refreshUI(sender: AnyObject) {
         retrieveDataFromTMDB()
@@ -44,10 +46,11 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
 //    @IBOutlet weak var tableView: UITableView!
     var movies:[NSDictionary]?
     var refreshControl: UIRefreshControl!
+    var filteredMovies:[NSDictionary]?
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if let movies = movies {
+        if let movies = filteredMovies {
             return movies.count
         } else {
             return 0
@@ -57,33 +60,34 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
         let cell = collectionsView.dequeueReusableCellWithReuseIdentifier("MovieCell", forIndexPath: indexPath) as! TopMovieCell
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         if let posterPath = movie["poster_path"] as? String {
             let baseURL = "http://image.tmdb.org/t/p/w500"
             let imageURL = NSURL(string: baseURL+posterPath)!
             cell.imgView.setImageWithURL(imageURL)
         }
-
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        print(indexPath.row)
-        let cell = collectionView.cellForItemAtIndexPath(indexPath)
-        if let cell = cell {
-//            let backgroundView = UIView()
-//            backgroundView.backgroundColor = UIColor.redColor()
-//            cell.selectedBackgroundView = backgroundView
-            cell.transform = CGAffineTransformMakeScale(-1, 1); //Flipped
-        }
+        let cell = collectionsView.cellForItemAtIndexPath(indexPath) as! TopMovieCell
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.blueColor()
+        cell.selectedBackgroundView = backgroundView
+        //cell.sendSubviewToBack(cell.imgView)
     }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
 
+        return CGSizeMake(collectionView.bounds.width/2 - 4, 200);
+    }
+    
     func retrieveDataFromTMDB() {
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
-//        let request = NSURLRequest(URL: url!)
         let request = NSURLRequest(URL: url!, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 100)
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
@@ -104,6 +108,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                             data, options:[]) as? NSDictionary {
                                 
                                 self.movies = responseDictionary["results"] as? [NSDictionary]
+                                self.filteredMovies = self.movies
                                 self.collectionsView.reloadData()
                         }
                     }
@@ -118,18 +123,17 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func setViewProperties() {
         
-        //        tableView.dataSource = self
-        //        tableView.delegate = self
         collectionsView.dataSource = self
         collectionsView.delegate = self
         
+        search.delegate = self
+        
         //Layout
-//        flowLayout.minimumLineSpacing = 1
-//        flowLayout.minimumInteritemSpacing = 0
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0)
+        flowLayout.minimumLineSpacing = 2
+//        flowLayout.minimumInteritemSpacing = 2
+        flowLayout.sectionInset = UIEdgeInsetsMake(0,2,0,2)
         
         //By default put the network error view hidden
-//        networkErrorView.hidden = true
         networkErrorButton.hidden = true
     }
     
@@ -151,41 +155,48 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionsView.insertSubview(refreshControl, atIndex: 0)
     }
     
-    /*
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    
-    if let movies = movies {
-    return movies.count
-    } else {
-    return 0
-    }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    
-    let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! MovieCell
-    let movie = movies![indexPath.row]
-    let title = movie["title"] as! String
-    let overview = movie["overview"] as? String
-    if let posterPath = movie["poster_path"] as? String {
-    let baseURL = "http://image.tmdb.org/t/p/w500"
-    let imageURL = NSURL(string: baseURL+posterPath)!
-    cell.imgView.setImageWithURL(imageURL)
-    }
-    cell.titleLabel.text = title
-    cell.overViewLabel.text = overview
-    
-    return cell
-    }
-    */
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         let cell = sender as! UICollectionViewCell
         
         let indexPath = collectionsView.indexPathForCell(cell)
-        let movie = movies![indexPath!.row]
+        let movie = filteredMovies![indexPath!.row]
         let detailViewController = segue.destinationViewController as! DetailViewController
         detailViewController.movie = movie
     }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        filteredMovies = [NSDictionary]()
+        if searchText.isEmpty == false {
+            for (_, movie) in (movies?.enumerate())! {
+                
+                if (movie["title"] as! String).lowercaseString.containsString(searchText.lowercaseString) {
+                    filteredMovies?.append(movie)
+                }
+            }
+        } else {
+            filteredMovies = movies
+        }
+        
+        collectionsView.reloadData()
+//        let filteredData = searchText.isEmpty ? data : data.filter({(dataString: String) -> Bool in
+//            return dataString.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+//        })
+        
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        self.search.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        search.showsCancelButton = false
+        search.text = ""
+        search.resignFirstResponder()
+        
+        filteredMovies = movies
+        collectionsView.reloadData()
+    }
+    
 }
