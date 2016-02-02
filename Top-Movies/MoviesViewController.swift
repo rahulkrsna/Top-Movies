@@ -16,7 +16,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     @IBOutlet var collectionsView: UICollectionView!
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet var networkErrorButton: UIButton!
-    
+    var endpoint: String!
     @IBAction func refreshUI(sender: AnyObject) {
         retrieveDataFromTMDB()
     }
@@ -71,8 +71,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     func retrieveDataFromTMDB() {
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
-        let request = NSURLRequest(URL: url!)
+        let url = NSURL(string:"https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
+//        let request = NSURLRequest(URL: url!)
+        let request = NSURLRequest(URL: url!, cachePolicy: .ReloadIgnoringLocalCacheData, timeoutInterval: 100)
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate:nil,
@@ -113,9 +114,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         collectionsView.delegate = self
         
         //Layout
-        flowLayout.minimumLineSpacing = 1
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.sectionInset = UIEdgeInsetsMake(0,20,0,80)
+//        flowLayout.minimumLineSpacing = 1
+//        flowLayout.minimumInteritemSpacing = 0
+//        flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0)
         
         //By default put the network error view hidden
 //        networkErrorView.hidden = true
@@ -167,5 +168,13 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     return cell
     }
     */
-
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        let cell = sender as! UICollectionViewCell
+        let indexPath = collectionsView.indexPathForCell(cell)
+        let movie = movies![indexPath!.row]
+        let detailViewController = segue.destinationViewController as! DetailViewController
+        detailViewController.movie = movie
+    }
 }
