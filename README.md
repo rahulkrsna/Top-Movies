@@ -47,7 +47,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 Image loading sometimes takes time. So the view is created without the poster of the movie only on refresh(scrolling up and down) the posters are shown.
 Image has been going out of the image view area. I have resolved that by fixing the image view width and height.
 It took sometime in understanding the constraints to be given to the views.
-
+It got some help from the mentor on how to manipulate the cell location and size(width, height) dynamically and implemented the same.
+Once I have started putting on the animations, view started to load slow, reduced the time of loading, shifted from low resolution to high resolution images whenever possible.
 
 ## License
 
