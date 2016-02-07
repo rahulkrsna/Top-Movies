@@ -38,6 +38,12 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         retrieveDataFromTMDB()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        retrieveDataFromTMDB()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -131,8 +137,10 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
                         }
                     }
                 } else {
-                    self.networkErrorButton.hidden = false
-                    self.collectionsView.alpha = 0
+                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                        self.networkErrorButton.hidden = false
+                        self.collectionsView.alpha = 0
+                    })
                 }
                 self.refreshControl.endRefreshing()
         });

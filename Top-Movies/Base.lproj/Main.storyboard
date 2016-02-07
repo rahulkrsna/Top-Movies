@@ -14,9 +14,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yYl-A2-cql">
-                                <rect key="frame" x="0.0" y="111" width="320" height="36"/>
+                                <rect key="frame" x="0.0" y="110" width="320" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.26094700380000002" blue="0.18904754360000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="1" green="0.54931247709999997" blue="0.65216720230000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Network Error" image="warning-8-24">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -63,7 +63,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.54931247709999997" blue="0.65216720230000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.49698292620000001" green="0.65151324769999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="TOP-MOVIES" id="OYL-Oe-X3Q"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
