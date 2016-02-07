@@ -64,7 +64,24 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         if let posterPath = movie["poster_path"] as? String {
             let baseURL = "http://image.tmdb.org/t/p/w500"
             let imageURL = NSURL(string: baseURL+posterPath)!
-            cell.imgView.setImageWithURL(imageURL)
+            let imageRequest = NSURLRequest(URL: imageURL)
+//            cell.imgView.setImageWithURL(imageURL)
+            cell.imgView.setImageWithURLRequest(imageRequest,
+                placeholderImage: nil,
+                success: { (imageReq, imageRes, image) -> Void in
+                    
+                    if(imageRes != nil) {
+                        cell.imgView.alpha = 0.0
+                        cell.imgView.image = image
+                        UIView.animateWithDuration(0.3, animations: { () -> Void in
+                            cell.imgView.alpha = 1.0
+                        })
+                    } else {
+                        cell.imgView.image = image // From cached images
+                    }
+                }, failure: { (imageReq, imageRes, error) -> Void in
+                    print("Image can't be loaded")
+            })
         }
         return cell
     }
@@ -74,8 +91,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         let cell = collectionsView.cellForItemAtIndexPath(indexPath) as! TopMovieCell
         
         let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.blueColor()
+        backgroundView.backgroundColor = UIColor.yellowColor()
         cell.selectedBackgroundView = backgroundView
+        collectionsView.deselectItemAtIndexPath(indexPath, animated: true)
         //cell.sendSubviewToBack(cell.imgView)
     }
     

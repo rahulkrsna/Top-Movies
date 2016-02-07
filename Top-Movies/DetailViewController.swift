@@ -43,9 +43,41 @@ class DetailViewController: UIViewController {
         overviewLabel.sizeToFit()
         
         if let posterPath = movie["poster_path"] as? String {
-            let baseURL = "http://image.tmdb.org/t/p/w500"
-            let imageURL = NSURL(string: baseURL+posterPath)!
-            posterImgView.setImageWithURL(imageURL)
+//            let baseURL = "http://image.tmdb.org/t/p/w500"
+            let lowResolutionBaseURL = "https://image.tmdb.org/t/p/w45"
+            let highResolutionBaseURL = "https://image.tmdb.org/t/p/original"
+            
+            let smallImageRequest = NSURLRequest(URL: NSURL(string: lowResolutionBaseURL+posterPath)!)
+            let largeImageRequest = NSURLRequest(URL: NSURL(string: highResolutionBaseURL+posterPath)!)
+            
+//            let imageURL = NSURL(string: lowResolutionBaseURL+posterPath)!
+//            posterImgView.setImageWithURL(imageURL)
+            posterImgView.setImageWithURLRequest(smallImageRequest,
+                placeholderImage: nil,
+                success: { (imageReq, imageRes, smallImg) -> Void in
+                    
+                    self.posterImgView.alpha = 0.0
+                    self.posterImgView.image = smallImg
+                    
+                    UIView.animateWithDuration(0.05, animations: { () -> Void in
+                        
+                        self.posterImgView.alpha = 1.0
+                        
+                        }, completion: { (success) -> Void in
+                            
+                            self.posterImgView.setImageWithURLRequest(largeImageRequest,
+                                placeholderImage: smallImg,
+                                success: { (largeImgReq, largeImgRes, largeImg) -> Void in
+                                    
+                                    self.posterImgView.image = largeImg
+                                    
+                                }, failure: { (imgReq, imgRes, error) -> Void in
+                                    print("Can't load high resolution image")
+                            })
+                    })
+                }, failure: { (imgReq, imgRes, error) -> Void in
+                    print("Can't load images")
+            })
         }
     }
 
